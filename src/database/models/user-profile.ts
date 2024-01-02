@@ -30,6 +30,7 @@ export class UserProfile extends BaseModel {
 
     @orm.columnType('string')
     matchedToUserId: string | null = null;
+    matchChannelId = '';
 
     matchCooldownExpires = 0;
 }

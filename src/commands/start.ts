@@ -2,8 +2,10 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
+    CategoryChannel,
     ChatInputCommandInteraction,
     ComponentType,
+    OverwriteType,
     SlashCommandBuilder,
 } from 'discord.js';
 import db from '../database/database.js';
@@ -11,10 +13,23 @@ import { Gender, UserProfile } from '../database/models/user-profile.js';
 import { UserError } from '../errors.js';
 import { buildProfileEmbed } from '../util.js';
 import { coolDownPeriod } from '../constants.js';
+import { GuildSettings } from '../database/models/guild-settings.js';
 
 export const data = new SlashCommandBuilder().setName('start').setDescription('Start looking for matches');
 
 export async function execute(int: ChatInputCommandInteraction) {
+    const settings = await db.findOneOptional(GuildSettings, {
+        where: {
+            clause: 'guildId = ?',
+            values: [int.guildId],
+        },
+    });
+
+    if (settings.matchCategoryChannelId.length === 0 || settings._new) {
+        throw new UserError('Run `/setup` to setup the matched user category first');
+    }
+    const parent = (await int.guild!.channels.fetch(settings.matchCategoryChannelId))! as CategoryChannel;
+
     const profile = db.findOneOptional(UserProfile, {
         where: {
             clause: 'userId = ? AND guildId = ?',
@@ -104,10 +119,14 @@ export async function execute(int: ChatInputCommandInteraction) {
         });
 
         if (btnInt.customId === 'yes') {
+            const matchProfile = await db.findOne(UserProfile, match.id);
+            matchProfile.matchedTo = profile.id;
+            matchProfile.matchedToUserId = profile.userId;
+            matchProfile.matchCooldownExpires = Date.now() + coolDownPeriod;
+
             profile.matchedTo = match.id;
             profile.matchedToUserId = match.userId;
             profile.matchCooldownExpires = Date.now() + coolDownPeriod;
-            db.save(profile);
 
             // fixme convert cooldown to time instead of hard code
             await btnInt.update({
@@ -115,11 +134,47 @@ export async function execute(int: ChatInputCommandInteraction) {
                 components: [],
             });
 
-            const matchProfile = await db.findOne(UserProfile, match.id);
-            matchProfile.matchedTo = profile.id;
-            matchProfile.matchedToUserId = profile.userId;
-            matchProfile.matchCooldownExpires = Date.now() + coolDownPeriod;
+            const matchChannel = await int.guild!.channels.create({
+                name: `match-${profile.id}-${matchProfile.id}`,
+                parent: parent.id,
+                permissionOverwrites: [
+                    ...parent.permissionOverwrites.cache.values(),
+                    {
+                        id: profile.userId,
+                        type: OverwriteType.Member,
+                        allow: [
+                            'SendMessages',
+                            'AddReactions',
+                            'ReadMessageHistory',
+                            'AttachFiles',
+                            'ViewChannel',
+                            'UseExternalEmojis',
+                            'UseExternalStickers',
+                        ],
+                        deny: ['CreateInstantInvite'],
+                    },
+                    {
+                        id: matchProfile.userId,
+                        type: OverwriteType.Member,
+                        allow: [
+                            'SendMessages',
+                            'AddReactions',
+                            'ReadMessageHistory',
+                            'AttachFiles',
+                            'ViewChannel',
+                            'UseExternalEmojis',
+                            'UseExternalStickers',
+                        ],
+                        deny: ['CreateInstantInvite'],
+                    },
+                ],
+            });
+
+            matchProfile.matchChannelId = matchChannel.id;
+            profile.matchChannelId = matchChannel.id;
+
             db.save(matchProfile);
+            db.save(profile);
             break;
         }
 
