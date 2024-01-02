@@ -124,6 +124,8 @@ export async function execute(int: ChatInputCommandInteraction) {
             });
 
             await menuResponse.deferUpdate();
+
+            profile.gender = menuResponse.values[0] as Gender;
         }
 
         {
