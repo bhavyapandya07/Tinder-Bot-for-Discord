@@ -1,0 +1,33 @@
+{
+  "name": "pairing-bot",
+  "version": "0.0.1",
+  "description": "A bot designed to pair two people on a server.",
+  "main": "dist/index.js",
+  "author": "Blockzilla101",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "emittery": "^1.0.1",
+    "node-sqlite-orm-2": "^1.0.0"
+  },
+  "scripts": {
+    "build": "yarn lint && tsc",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/ --ext .ts",
+    "fix": "eslint src/ --ext .ts --fix",
+    "dev": "tsx src/index.ts"
+  }
+}

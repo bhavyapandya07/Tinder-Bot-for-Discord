@@ -1,0 +1,11 @@
+{
+    // "editor.codeActionsOnSave": {
+    // "source.fixAll.eslint": true
+    // },
+    "eslint.validate": ["javascript", "typescript", "json"],
+    "files.autoSave": "onFocusChange",
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

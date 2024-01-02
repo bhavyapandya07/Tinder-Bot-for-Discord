@@ -1,0 +1,40 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "overrides": [
+        {
+            "files": "./src/**/*.ts",
+            "plugins": ["@typescript-eslint"],
+            "rules": {
+                "indent": "off",
+                "linebreak-style": ["error", "unix"],
+                "quotes": ["error", "single"],
+                "semi": ["error", "always"],
+                "no-multiple-empty-lines": [
+                    "warn",
+                    {
+                        "max": 1,
+                        "maxEOF": 0
+                    }
+                ]
+            }
+        },
+        {
+            "files": "**/*.json",
+            "rules": {
+                "quotes": ["error", "double"],
+                "indent": ["warn", 2],
+                "semi": ["off"]
+            }
+        }
+    ]
+}

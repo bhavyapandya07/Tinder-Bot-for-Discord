@@ -1,0 +1,27 @@
+{
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+    },
+    "compilerOptions": {
+        "incremental": true,
+        "tsBuildInfoFile": "./.tsbuildinfo",
+        "target": "ES2022",
+        "experimentalDecorators": true,
+        "module": "NodeNext",
+        "rootDir": "./src",
+        "moduleResolution": "NodeNext",
+        // "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "outDir": "./dist",
+        "newLine": "lf",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/"]
+}
