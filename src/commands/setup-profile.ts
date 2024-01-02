@@ -3,11 +3,8 @@ import {
     ChatInputCommandInteraction,
     ComponentType,
     Message,
-    ModalBuilder,
     SlashCommandBuilder,
     StringSelectMenuBuilder,
-    TextInputBuilder,
-    TextInputStyle,
 } from 'discord.js';
 import db from '../database/database.js';
 import { Gender, UserProfile } from '../database/models/user-profile.js';
@@ -32,7 +29,7 @@ export async function execute(int: ChatInputCommandInteraction) {
 
         {
             await int.reply(
-                'Following questions will guide you on completing your profile.\n1. Tell something about yourself.'
+                'Following questions will guide you on completing your profile.\nCan you tell us more about yourself?'
             );
 
             ans = (
@@ -49,7 +46,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         // fixme: validate links
         {
             await ans.reply({
-                content: '2. Provide a link to your social media.',
+                content: 'Can you please provide the links for your social media (It can be multiple links)',
             });
 
             ans = (
@@ -67,7 +64,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             const row = new ActionRowBuilder();
             const menu = new StringSelectMenuBuilder()
                 .setCustomId(getAnId())
-                .setPlaceholder('4. Select your interests')
+                .setPlaceholder('What are your interests?')
                 .setMinValues(1)
                 .setMaxValues(interests.length)
                 .setOptions(
@@ -102,7 +99,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             const row = new ActionRowBuilder();
             const menu = new StringSelectMenuBuilder()
                 .setCustomId(getAnId())
-                .setPlaceholder('5. Select your Gender')
+                .setPlaceholder('What is your gender?')
                 .setOptions(
                     {
                         label: 'Male',
@@ -111,10 +108,6 @@ export async function execute(int: ChatInputCommandInteraction) {
                     {
                         label: 'Female',
                         value: 'female',
-                    },
-                    {
-                        label: 'Other',
-                        value: 'other',
                     }
                 );
 
@@ -130,45 +123,14 @@ export async function execute(int: ChatInputCommandInteraction) {
                 time: 60 * 1000,
             });
 
-            profile.gender = menuResponse.values[0] as Gender;
-
-            if (profile.gender === Gender.Other) {
-                const modal = new ModalBuilder()
-                    .setCustomId(getAnId())
-                    .setTitle('Gender')
-                    .setComponents([
-                        new ActionRowBuilder().addComponents(
-                            new TextInputBuilder()
-                                .setCustomId('gender-input')
-                                .setLabel('Gender')
-                                .setStyle(TextInputStyle.Short)
-                                .setMaxLength(50)
-                                .setRequired(true)
-                                .setMinLength(1)
-                                .setPlaceholder('Enter your gender here...')
-                        ) as ActionRowBuilder<TextInputBuilder>,
-                    ]);
-
-                await menuResponse.showModal(modal);
-                const resp = await menuResponse.awaitModalSubmit({
-                    time: 3 * 60 * 1000,
-                    filter: (i) => i.user.id == int.user.id,
-                });
-
-                const customGender = resp.fields.getTextInputValue('gender-input');
-                profile.otherGenderDetail = customGender;
-
-                await resp.deferUpdate();
-            } else {
-                await menuResponse.deferUpdate();
-            }
+            await menuResponse.deferUpdate();
         }
 
         {
             const row = new ActionRowBuilder();
             const menu = new StringSelectMenuBuilder()
                 .setCustomId(getAnId())
-                .setPlaceholder('6. Select gender you want to get matched with.')
+                .setPlaceholder('Which gender you want to get matched with?')
                 .setOptions(
                     {
                         label: 'Male',
@@ -205,7 +167,7 @@ export async function execute(int: ChatInputCommandInteraction) {
     } catch (e) {
         if (e instanceof Error && e.message.includes('time')) {
             const content =
-                'Answer the questions with a couple minutes, you can start the setup again through /setup-profile';
+                'Answer the questions within a couple minutes, you can start the setup again through /setup-profile';
             if (!int.replied) {
                 await int.reply({
                     content,

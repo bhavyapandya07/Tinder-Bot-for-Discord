@@ -33,7 +33,7 @@ export async function execute(int: ChatInputCommandInteraction) {
     const matches = db.db
         .prepare(
             `
-        SELECT id, interests, gender, bio, link, userId, otherGenderDetail, (
+        SELECT id, interests, gender, bio, link, userId, (
                 SELECT json_group_array(value) FROM json_each(interests)
                 WHERE value IN (select value FROM json_each(?))
             ) AS matchingInterests
@@ -51,10 +51,15 @@ export async function execute(int: ChatInputCommandInteraction) {
         matchingInterests: string[];
         gender: Gender;
         bio: string | null;
-        otherGenderDetail: string | null;
         link: string | null;
         userId: string;
     }[];
+
+    if (matches.length === 0) {
+        await reply.edit({
+            content: 'Unable to find matches :(',
+        });
+    }
 
     let btnInt;
     let i = 0;

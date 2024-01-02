@@ -8,7 +8,6 @@ export function getAnId() {
 
 export function buildProfileEmbed(data: {
     gender: Gender;
-    otherGenderDetail: string | null;
     username: string;
     avatarUrl: string;
     link: string | null;
@@ -34,7 +33,7 @@ export function buildProfileEmbed(data: {
             }
         )
         .setFooter({
-            text: `Gender: ${data.gender === Gender.Other ? data.otherGenderDetail ?? 'other' : data.gender}`,
+            text: `Gender: ${data.gender}`,
         });
 
     return embed;
