@@ -14,6 +14,8 @@ export const orm = new SqliteOrm({
     backupInterval: 3 * 24 * 60 * 60 * 1000,
 });
 
+export default orm;
+
 export async function loadModels(dir: string) {
     log.info('loading models...');
     for (const model of fs.readdirSync(dir)) {
