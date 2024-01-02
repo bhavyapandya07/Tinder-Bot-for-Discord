@@ -161,7 +161,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         profile.completedSetup = true;
         db.save(profile);
 
-        ans.reply({
+        await ans.reply({
             content: 'You profile setup is complete, run `/start` to find a match.',
         });
     } catch (e) {

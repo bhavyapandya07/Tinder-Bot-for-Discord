@@ -59,6 +59,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         await reply.edit({
             content: 'Unable to find matches :(',
         });
+        return;
     }
 
     let btnInt;

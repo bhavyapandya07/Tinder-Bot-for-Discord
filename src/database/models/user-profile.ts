@@ -14,6 +14,7 @@ export class UserProfile extends BaseModel {
     @orm.columnType('string')
     gender!: Gender;
 
+    @orm.columnType('string')
     matchingGender!: Gender;
 
     @orm.columnType('string')
