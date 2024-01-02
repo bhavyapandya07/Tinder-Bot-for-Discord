@@ -35,7 +35,10 @@ export async function execute(int: ChatInputCommandInteraction) {
                 name: '🪀 Interests',
                 value: profile.interests.length === 0 ? '*Not set*' : profile.interests.join(', '),
             }
-        );
+        )
+        .setFooter({
+            text: `Gender: ${profile.gender}`,
+        });
 
     await int.reply({
         embeds: [embed],

@@ -13,9 +13,8 @@ export async function execute(int: ChatInputCommandInteraction) {
         },
     });
 
-    if (profile.interests.length === 0) throw new UserError('Please complete your profile first!');
+    if (profile.completedSetup) throw new UserError('Run `/setup-profile` to setup your profile first');
 
-    profile.isMatching = true;
     db.save(profile);
 
     await int.reply({

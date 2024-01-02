@@ -2,6 +2,8 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 
+export const disable = true;
+
 export const data = new SlashCommandBuilder().setName('start').setDescription('Start looking for matches');
 
 export async function execute(int: ChatInputCommandInteraction) {
@@ -12,7 +14,6 @@ export async function execute(int: ChatInputCommandInteraction) {
         },
     });
 
-    profile.isMatching = false;
     db.save(profile);
 
     if (profile.matchedToUserId != null) {

@@ -37,7 +37,7 @@ export async function execute(int: ChatInputCommandInteraction) {
     const menuResponse = await resp.awaitMessageComponent({
         componentType: ComponentType.StringSelect,
         filter: (i) => i.user.id === int.user.id,
-        idle: 60 * 1000,
+        time: 60 * 1000,
     });
 
     const profile = db.findOneOptional(UserProfile, {

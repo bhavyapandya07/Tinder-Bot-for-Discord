@@ -15,7 +15,8 @@ await loadModels(path.join(path.dirname(new URL(import.meta.url).pathname), 'dat
 await loadCommands(path.join(path.dirname(new URL(import.meta.url).pathname), 'commands'));
 
 const client = new Discord.Client({
-    intents: ['Guilds'],
+    intents: ['Guilds', 'MessageContent', 'GuildMessages'],
+    partials: [Discord.Partials.Message],
 });
 
 client.on('ready', (client) => {

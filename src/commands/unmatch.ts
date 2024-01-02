@@ -3,6 +3,8 @@ import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 import { UserError } from '../errors.js';
 
+export const disable = true;
+
 export const data = new SlashCommandBuilder().setName('unmatch').setDescription('Remove your match');
 
 export async function execute(int: ChatInputCommandInteraction) {
