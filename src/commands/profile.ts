@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import db from '../database/database.js';
-import { UserProfile } from '../database/models/user-profile.js';
+import { Gender, UserProfile } from '../database/models/user-profile.js';
 
 export const data = new SlashCommandBuilder().setName('profile').setDescription('See your profile.');
 
@@ -37,7 +37,9 @@ export async function execute(int: ChatInputCommandInteraction) {
             }
         )
         .setFooter({
-            text: `Gender: ${profile.gender}`,
+            text: `Gender: ${
+                profile.gender === Gender.Other ? profile.otherGenderDetail ?? 'other' : profile.gender
+            }`,
         });
 
     await int.reply({

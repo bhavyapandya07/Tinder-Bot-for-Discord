@@ -3,8 +3,11 @@ import {
     ChatInputCommandInteraction,
     ComponentType,
     Message,
+    ModalBuilder,
     SlashCommandBuilder,
     StringSelectMenuBuilder,
+    TextInputBuilder,
+    TextInputStyle,
 } from 'discord.js';
 import db from '../database/database.js';
 import { Gender, UserProfile } from '../database/models/user-profile.js';
@@ -125,9 +128,39 @@ export async function execute(int: ChatInputCommandInteraction) {
                 filter: (i) => i.user.id === int.user.id,
                 time: 60 * 1000,
             });
-            await menuResponse.deferUpdate();
 
             profile.gender = menuResponse.values[0] as Gender;
+
+            if (profile.gender === Gender.Other) {
+                const modal = new ModalBuilder()
+                    .setCustomId(getAnId())
+                    .setTitle('Gender')
+                    .setComponents([
+                        new ActionRowBuilder().addComponents(
+                            new TextInputBuilder()
+                                .setCustomId('gender-input')
+                                .setLabel('Gender')
+                                .setStyle(TextInputStyle.Short)
+                                .setMaxLength(50)
+                                .setRequired(true)
+                                .setMinLength(1)
+                                .setPlaceholder('Enter your gender here...')
+                        ) as ActionRowBuilder<TextInputBuilder>,
+                    ]);
+
+                await menuResponse.showModal(modal);
+                const resp = await menuResponse.awaitModalSubmit({
+                    time: 3 * 60 * 1000,
+                    filter: (i) => i.user.id == int.user.id,
+                });
+
+                const customGender = resp.fields.getTextInputValue('gender-input');
+                profile.otherGenderDetail = customGender;
+
+                await resp.deferUpdate();
+            } else {
+                await menuResponse.deferUpdate();
+            }
         }
 
         {
