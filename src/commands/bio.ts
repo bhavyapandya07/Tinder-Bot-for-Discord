@@ -18,6 +18,7 @@ export async function execute(int: ChatInputCommandInteraction) {
     });
 
     profile.guildId = int.guildId!;
+    profile.userId = int.user.id;
     profile.bio = aboutMe;
     db.save(profile);
 
