@@ -31,7 +31,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             },
             {
                 name: '🪀 Interests',
-                value: profile.interests.length === 0 ? '*Not set*' : 'to be impl',
+                value: profile.interests.length === 0 ? '*Not set*' : profile.interests.join(', '),
             }
         );
 
