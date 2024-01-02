@@ -13,6 +13,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Link to your social media.')
             .setMaxLength(300)
             .setMinLength(5)
+            .setRequired(true)
     );
 
 export async function execute(int: ChatInputCommandInteraction) {

@@ -13,6 +13,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Something about you.')
             .setMaxLength(1000)
             .setMinLength(3)
+            .setRequired(true)
     );
 
 export async function execute(int: ChatInputCommandInteraction) {
