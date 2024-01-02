@@ -4,6 +4,8 @@ import { UserProfile } from '../database/models/user-profile.js';
 
 export const data = new SlashCommandBuilder().setName('profile').setDescription('See your profile.');
 
+// fixme: match output
+
 export async function execute(int: ChatInputCommandInteraction) {
     const profile = db.findOneOptional(UserProfile, {
         where: {
