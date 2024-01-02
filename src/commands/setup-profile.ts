@@ -46,6 +46,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             profile.bio = ans.content.slice(0, 1000);
         }
 
+        // fixme: validate links
         {
             await ans.reply({
                 content: '2. Provide a link to your social media.',

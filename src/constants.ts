@@ -8,3 +8,6 @@ export const interests: [emoji: string, name: string][] = [
     ['✈️', 'Guitar'],
     ['✈️', 'Piano'],
 ];
+
+// 7 days
+export const coolDownPeriod = 7 * 24 * 60 * 60 * 1000;
