@@ -21,8 +21,8 @@ export async function execute(int: ChatInputCommandInteraction) {
 
     const profile = db.findOneOptional(UserProfile, {
         where: {
-            clause: 'userId = ?',
-            values: [int.user.id],
+            clause: 'userId = ? AND guildId = ?',
+            values: [int.user.id, int.guildId],
         },
     });
 
