@@ -5,7 +5,13 @@ import { UserProfile } from '../database/models/user-profile.js';
 export const data = new SlashCommandBuilder()
     .setName('bio')
     .setDescription('Tell us something about yourself.')
-    .addStringOption(new SlashCommandStringOption().setName('aboutme').setMaxLength(1000).setMinLength(3));
+    .addStringOption(
+        new SlashCommandStringOption()
+            .setName('aboutme')
+            .setDescription('Something about you.')
+            .setMaxLength(1000)
+            .setMinLength(3)
+    );
 
 export async function execute(int: ChatInputCommandInteraction) {
     const aboutMe = int.options.getString('aboutme', true);

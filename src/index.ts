@@ -7,7 +7,6 @@ Log.rotate();
 const log = create('main');
 log.info('starting up...');
 
-import './core/auto-completer.js';
 import { loadCommands } from './core/command-handler.js';
 import { loadModels } from './database/database.js';
 import path from 'path';

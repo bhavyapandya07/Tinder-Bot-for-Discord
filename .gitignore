@@ -5,4 +5,5 @@
 yarn-error.log
 .env
 *.db
+*.db.model.json
 test.ts

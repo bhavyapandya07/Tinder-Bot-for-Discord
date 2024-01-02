@@ -3,9 +3,15 @@ import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 
 export const data = new SlashCommandBuilder()
-    .setName('bio')
+    .setName('link')
     .setDescription('Link your social media.')
-    .addStringOption(new SlashCommandStringOption().setName('url').setMaxLength(300).setMinLength(5));
+    .addStringOption(
+        new SlashCommandStringOption()
+            .setName('url')
+            .setDescription('Link to your social media.')
+            .setMaxLength(300)
+            .setMinLength(5)
+    );
 
 export async function execute(int: ChatInputCommandInteraction) {
     const link = int.options.getString('url', true);

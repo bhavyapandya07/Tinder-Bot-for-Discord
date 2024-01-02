@@ -19,6 +19,7 @@ export async function execute(int: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
         .setTitle(`${int.user.username}'s Profile`)
         .setThumbnail(int.user.displayAvatarURL())
+        .setColor('#4444ee')
         .addFields(
             {
                 name: '✨ Link',
