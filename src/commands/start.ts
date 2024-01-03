@@ -11,7 +11,7 @@ import {
 import db from '../database/database.js';
 import { Gender, UserProfile } from '../database/models/user-profile.js';
 import { UserError } from '../errors.js';
-import { buildProfileEmbed } from '../util.js';
+import { buildProfileEmbed, prettyPrintDuration } from '../util.js';
 import { coolDownPeriod } from '../constants.js';
 import { GuildSettings } from '../database/models/guild-settings.js';
 
@@ -38,8 +38,32 @@ export async function execute(int: ChatInputCommandInteraction) {
     });
 
     if (!profile.completedSetup) throw new UserError('Run `/setup-profile` to setup your profile first');
-    if (profile.matchCooldownExpires > Date.now())
+    if (profile.matchCooldownExpires > Date.now()) {
         throw new UserError('Take your time to get to know your match first!');
+    }
+
+    // reset the state
+    if (profile.matchedToUserId != null && profile.matchCooldownExpires < Date.now()) {
+        if (int.channelId === profile.matchChannelId) {
+            throw new UserError(
+                'Run this command in a different channel as this channel will be deleted on match status reset.'
+            );
+        }
+
+        await int.guild!.channels.delete(profile.matchChannelId!, 'User reset their match status');
+
+        const matchedProfile = db.findOne(UserProfile, profile.matchedTo);
+        matchedProfile.matchChannelId = null;
+        matchedProfile.matchedToUserId = null;
+        matchedProfile.matchedTo = -1;
+
+        profile.matchChannelId = null;
+        profile.matchedToUserId = null;
+        profile.matchedTo = -1;
+
+        db.save(profile);
+        db.save(matchedProfile);
+    }
 
     const reply = await int.reply({
         content: 'Finding potential matches...',
@@ -128,9 +152,13 @@ export async function execute(int: ChatInputCommandInteraction) {
             profile.matchedToUserId = match.userId;
             profile.matchCooldownExpires = Date.now() + coolDownPeriod;
 
-            // fixme convert cooldown to time instead of hard code
             await btnInt.update({
-                content: `You were matched with <@${match.userId}>, you will not be able to use the \`/start\` command for 7 days`,
+                content: `You were matched with <@${
+                    match.userId
+                }>, you will not be able to use the \`/start\` command for ${prettyPrintDuration(
+                    coolDownPeriod,
+                    true
+                )}`,
                 components: [],
             });
 

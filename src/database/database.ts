@@ -1,4 +1,4 @@
-import { SqlTable, SqliteOrm } from 'node-sqlite-orm-2';
+import { SqlTable, SqliteOrm } from 'node-sqlite-orm';
 import { create } from '../log.js';
 import path from 'path';
 import fs from 'fs';

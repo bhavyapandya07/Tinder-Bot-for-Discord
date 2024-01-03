@@ -1153,11 +1153,12 @@ node-abi@^3.3.0:
   dependencies:
     semver "^7.3.5"
 
-node-sqlite-orm-2@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/node-sqlite-orm-2/-/node-sqlite-orm-2-1.0.0.tgz#11eba492222bc40d7641f68e4883cfdc53c7a89e"
-  integrity sha512-ncxhcmeAADeJViu+a/xq2wztYA6Z6wWD7u++7oy3W+znrSeGnVvpGbaqkkAokoEz84B/Ah8kkH5rynolHOzWjw==
+node-sqlite-orm@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/node-sqlite-orm/-/node-sqlite-orm-1.0.1.tgz#56a84155d57c37e0b6de8bafd59a3cd8b9a78372"
+  integrity sha512-dHQ2euWqdrwRevYBkAXzCqyVJXIz2HM2qi3oVWrW80242B2e2FDnaYHqE7UM/V7H6w0s0DH8iFjDE2EYFCqkqQ==
   dependencies:
+    "@types/better-sqlite3" "^7.6.8"
     better-sqlite3 "^9.2.2"
     chalk "^5.3.0"
 

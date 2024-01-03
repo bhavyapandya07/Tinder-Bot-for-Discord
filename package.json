@@ -8,7 +8,6 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.8",
     "@types/node": "^20.4.2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -23,7 +22,7 @@
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "emittery": "^1.0.1",
-    "node-sqlite-orm-2": "^1.0.0"
+    "node-sqlite-orm": "^1.0.1"
   },
   "scripts": {
     "build": "yarn lint && tsc",

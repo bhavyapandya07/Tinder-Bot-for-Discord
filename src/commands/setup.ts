@@ -9,6 +9,7 @@ import { GuildSettings } from '../database/models/guild-settings.js';
 
 export const data = new SlashCommandBuilder()
     .setName('setup')
+    .setDescription('Configure server settings')
     .addChannelOption(
         new SlashCommandChannelOption()
             .setName('channel')
@@ -27,6 +28,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         },
     });
 
+    settings.guildId = int.guildId!;
     settings.matchCategoryChannelId = channel.id;
     db.save(settings);
 
