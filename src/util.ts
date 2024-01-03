@@ -1,5 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 import { Gender } from './database/models/user-profile.js';
+import { blacklistedSocialMediaDomains, whitelistedSocialMediaDomains } from './constants.js';
 
 let id = 0;
 export function getAnId() {
@@ -97,5 +98,30 @@ export function prettyPrintDuration(millis: number, longVersion = false) {
         }${minutes === 0 ? '' : `${minutes} ${putAnS('min', minutes)} `}${
             seconds === 0 ? '' : `${seconds} ${putAnS('sec', seconds)} `
         }`.trim();
+    }
+}
+
+export function validUrl(urlStr: string): boolean {
+    if (urlStr.startsWith('<') && urlStr.endsWith('>')) {
+        urlStr = urlStr.slice(1, -1);
+    }
+
+    try {
+        const url = new URL(urlStr);
+        if (url.protocol.toLowerCase() !== 'https:' && url.protocol.toLowerCase() !== 'http:') {
+            return false;
+        }
+
+        if (blacklistedSocialMediaDomains.includes(url.hostname)) return false;
+        if (
+            whitelistedSocialMediaDomains.length > 0 &&
+            !whitelistedSocialMediaDomains.includes(url.hostname)
+        ) {
+            return false;
+        }
+
+        return true;
+    } catch (e) {
+        return false;
     }
 }

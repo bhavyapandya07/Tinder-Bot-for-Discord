@@ -8,8 +8,9 @@ import {
 } from 'discord.js';
 import db from '../database/database.js';
 import { Gender, UserProfile } from '../database/models/user-profile.js';
-import { getAnId } from '../util.js';
+import { getAnId, validUrl } from '../util.js';
 import { interests } from '../constants.js';
+import { UserError } from '../errors.js';
 
 export const data = new SlashCommandBuilder().setName('setup-profile').setDescription('Setup your profile.');
 
@@ -43,10 +44,10 @@ export async function execute(int: ChatInputCommandInteraction) {
             profile.bio = ans.content.slice(0, 1000);
         }
 
-        // fixme: validate links
         {
             await ans.reply({
-                content: 'Can you please provide the links for your social media (It can be multiple links)',
+                content:
+                    'Can you please provide the links for your social media (It can be multiple links, enter each on new lines)',
             });
 
             ans = (
@@ -57,7 +58,10 @@ export async function execute(int: ChatInputCommandInteraction) {
                     errors: ['time'],
                 })
             ).first()!;
-            profile.link = ans.content.slice(0, 300);
+
+            const links = ans.content.split('\n').filter(validUrl);
+            if (links.length === 0) throw new UserError('Provide a valid link.');
+            profile.link = links.join('\n');
         }
 
         {
