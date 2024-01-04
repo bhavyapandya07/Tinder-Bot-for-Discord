@@ -11,7 +11,7 @@ function updateStatus(client: Client<true>) {
     });
 
     client.user.setActivity({
-        name: `Matched ${matched} users so far`,
+        name: matched === 0 ? 'No users matched yet' : `Matched ${matched} users so far`,
         type: ActivityType.Custom,
     });
 }
