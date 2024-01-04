@@ -1,6 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
+import { validUrl } from '../util.js';
+import { UserError } from '../errors.js';
 
 export const data = new SlashCommandBuilder()
     .setName('link')
@@ -16,6 +18,8 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(int: ChatInputCommandInteraction) {
     const link = int.options.getString('url', true);
+
+    if (!validUrl(link)) throw new UserError('The link you have provided is not valid.');
 
     const profile = db.findOneOptional(UserProfile, {
         where: {

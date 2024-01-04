@@ -10,7 +10,6 @@ import db from '../database/database.js';
 import { Gender, UserProfile } from '../database/models/user-profile.js';
 import { getAnId, validUrl } from '../util.js';
 import { interests } from '../constants.js';
-import { UserError } from '../errors.js';
 
 export const data = new SlashCommandBuilder().setName('setup-profile').setDescription('Setup your profile.');
 
@@ -30,12 +29,12 @@ export async function execute(int: ChatInputCommandInteraction) {
         profile.userId = int.user.id;
 
         {
-            await dmChannel.send(
+            const dmMsg = await dmChannel.send(
                 'Following questions will guide you on completing your profile.\nCan you tell us more about yourself?'
             );
 
             await int.reply({
-                content: 'Check your DMs',
+                content: `Check your DMs ${dmMsg.url}`,
                 ephemeral: true,
             });
 
@@ -66,7 +65,12 @@ export async function execute(int: ChatInputCommandInteraction) {
             ).first()!;
 
             const links = ans.content.split('\n').filter(validUrl);
-            if (links.length === 0) throw new UserError('Provide a valid link.');
+            if (links.length === 0) {
+                await ans.reply({
+                    content: 'Provide a valid link.',
+                });
+                return;
+            }
             profile.link = links.join('\n');
         }
 
@@ -174,7 +178,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         db.save(profile);
 
         await ans.reply({
-            content: 'You profile setup is complete, run `/start` to find a match.',
+            content: `You profile setup is complete, run \`/start\` to find a match. (<#${int.channelId}>)`,
         });
     } catch (e) {
         if (e instanceof Error && e.stack?.includes('time')) {

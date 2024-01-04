@@ -32,15 +32,16 @@ export function buildProfileEmbed(data: {
             {
                 name: '🪀 Interests',
                 value: data.interests.length === 0 ? '*Not set*' : data.interests.join(', '),
+            },
+            {
+                name: `${data.gender === Gender.Male ? '♀️' : '♂️'} Gender`,
+                value: data.gender,
             }
-        )
-        .setFooter({
-            text: `Gender: ${data.gender}`,
-        });
+        );
 
     if (data.matchedTo != null) {
         embed.addFields({
-            name: '🔗 Match',
+            name: '❤️ Match',
             value: `<@${data.matchedTo}>`,
         });
     }
