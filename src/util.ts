@@ -34,8 +34,8 @@ export function buildProfileEmbed(data: {
                 value: data.interests.length === 0 ? '*Not set*' : data.interests.join(', '),
             },
             {
-                name: `${data.gender === Gender.Male ? '♀️' : '♂️'} Gender`,
-                value: data.gender,
+                name: `${data.gender === Gender.Male ? '♂️' : '♀️'} Gender`,
+                value: capitalize(data.gender),
             }
         );
 
@@ -133,4 +133,8 @@ export function validUrl(urlStr: string): boolean {
     } catch (e) {
         return false;
     }
+}
+
+export function capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }

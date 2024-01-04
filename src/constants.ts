@@ -10,7 +10,7 @@ export const interests: [emoji: string, name: string][] = [
 ];
 
 // 7 days
-export const coolDownPeriod = 7 * 24 * 60 * 60 * 1000;
+export const coolDownPeriod = 3 * 24 * 60 * 60 * 1000;
 
 /** Social media hostnames which are not allowed (empty to disable) */
 export const blacklistedSocialMediaDomains: string[] = [];

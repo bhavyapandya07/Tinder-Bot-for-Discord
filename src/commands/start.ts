@@ -67,13 +67,13 @@ export async function execute(int: ChatInputCommandInteraction) {
         db.save(matchedProfile);
     }
 
-    await int.reply({
-        content: 'Check your DMs',
-        ephemeral: true,
-    });
-
     const reply = await dmChannel.send({
         content: 'Finding potential matches...',
+    });
+
+    await int.reply({
+        content: `Check your DMs (${reply.url})`,
+        ephemeral: true,
     });
 
     const matches = db.db
@@ -121,13 +121,13 @@ export async function execute(int: ChatInputCommandInteraction) {
             new ButtonBuilder().setCustomId('cancel').setLabel('Cancel').setStyle(ButtonStyle.Secondary)
         );
 
-        const user = await int.client.users.fetch(match.userId);
+        const matchUser = await int.client.users.fetch(match.userId);
 
         const embed = buildProfileEmbed({
             ...match,
             matchedTo: null,
-            username: user.username,
-            avatarUrl: user.displayAvatarURL(),
+            username: matchUser.username,
+            avatarUrl: matchUser.displayAvatarURL(),
             interests: JSON.parse(match.interests),
         });
 
@@ -213,7 +213,11 @@ export async function execute(int: ChatInputCommandInteraction) {
             db.save(profile);
 
             await matchChannel.send({
-                content: `<@${profile.id}> and <@${matchProfile.id}> are now matched together, take your time to get to know your match.`,
+                content: `<@${profile.userId}> and <@${matchProfile.userId}> are now matched together, take your time to get to know your match.`,
+            });
+
+            await matchUser.send({
+                content: `<@${profile.userId}> is now your match, get to know them well.`,
             });
             break;
         }

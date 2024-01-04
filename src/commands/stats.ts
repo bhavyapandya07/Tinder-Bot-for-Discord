@@ -28,7 +28,7 @@ export async function execute(int: ChatInputCommandInteraction) {
 
     const matched = db.countWhere(UserProfile, {
         where: {
-            clause: 'guildId = ? AND NOT matchedToUserId = NULL',
+            clause: 'guildId = ? AND matchedToUserId NOT NULL',
             values: [int.guildId!],
         },
     });

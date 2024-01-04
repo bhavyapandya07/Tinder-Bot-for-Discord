@@ -34,7 +34,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             );
 
             await int.reply({
-                content: `Check your DMs ${dmMsg.url}`,
+                content: `Check your DMs (${dmMsg.url})`,
                 ephemeral: true,
             });
 
