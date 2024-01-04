@@ -20,7 +20,7 @@ export const data = new SlashCommandBuilder().setName('start').setDescription('S
 export async function execute(int: ChatInputCommandInteraction) {
     const dmChannel = await int.user.createDM();
 
-    const settings = await db.findOneOptional(GuildSettings, {
+    const settings = db.findOneOptional(GuildSettings, {
         where: {
             clause: 'guildId = ?',
             values: [int.guildId],
@@ -151,7 +151,7 @@ export async function execute(int: ChatInputCommandInteraction) {
         });
 
         if (btnInt.customId === 'yes') {
-            const matchProfile = await db.findOne(UserProfile, match.id);
+            const matchProfile = db.findOne(UserProfile, match.id);
             matchProfile.matchedTo = profile.id;
             matchProfile.matchedToUserId = profile.userId;
             matchProfile.matchCooldownExpires = Date.now() + coolDownPeriod;
@@ -211,6 +211,10 @@ export async function execute(int: ChatInputCommandInteraction) {
 
             db.save(matchProfile);
             db.save(profile);
+
+            await matchChannel.send({
+                content: `<@${profile.id}> and <@${matchProfile.id}> are now matched together, take your time to get to know your match.`,
+            });
             break;
         }
 
