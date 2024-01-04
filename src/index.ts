@@ -15,6 +15,7 @@ await loadModels(path.join(path.dirname(new URL(import.meta.url).pathname), 'dat
 await loadCommands(path.join(path.dirname(new URL(import.meta.url).pathname), 'commands'));
 
 import './core/cleanup-channels.js';
+import './core/status-updater.js';
 
 const client = new Discord.Client({
     intents: ['Guilds', 'MessageContent', 'GuildMessages', 'DirectMessages'],

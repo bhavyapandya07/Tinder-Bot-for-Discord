@@ -14,6 +14,7 @@ import { UserError } from '../errors.js';
 import { buildProfileEmbed, prettyPrintDuration } from '../util.js';
 import { coolDownPeriod } from '../constants.js';
 import { GuildSettings } from '../database/models/guild-settings.js';
+import { Events } from '../core/events.js';
 
 export const data = new SlashCommandBuilder().setName('start').setDescription('Start looking for matches');
 
@@ -67,6 +68,8 @@ export async function execute(int: ChatInputCommandInteraction) {
 
         db.save(profile);
         db.save(matchedProfile);
+
+        Events.emit('profileUnMatched', int.client);
     }
 
     const reply = await dmChannel.send({
@@ -213,6 +216,7 @@ export async function execute(int: ChatInputCommandInteraction) {
 
             db.save(matchProfile);
             db.save(profile);
+            Events.emit('profileMatched', int.client);
 
             await matchChannel.send({
                 content: `<@${profile.userId}> and <@${matchProfile.userId}> are now matched together, take your time to get to know your match.`,
