@@ -52,7 +52,9 @@ export async function execute(int: ChatInputCommandInteraction) {
             );
         }
 
-        await int.guild!.channels.delete(profile.matchChannelId!, 'User reset their match status');
+        if (profile.matchChannelId != null) {
+            await int.guild!.channels.delete(profile.matchChannelId, 'User reset their match status');
+        }
 
         const matchedProfile = db.findOne(UserProfile, profile.matchedTo);
         matchedProfile.matchChannelId = null;

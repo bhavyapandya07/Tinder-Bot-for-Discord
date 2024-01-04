@@ -14,6 +14,8 @@ import path from 'path';
 await loadModels(path.join(path.dirname(new URL(import.meta.url).pathname), 'database', 'models'));
 await loadCommands(path.join(path.dirname(new URL(import.meta.url).pathname), 'commands'));
 
+import './core/cleanup-channels.js';
+
 const client = new Discord.Client({
     intents: ['Guilds', 'MessageContent', 'GuildMessages', 'DirectMessages'],
     partials: [Discord.Partials.Message],
