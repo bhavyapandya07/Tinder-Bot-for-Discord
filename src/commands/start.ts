@@ -18,6 +18,8 @@ import { GuildSettings } from '../database/models/guild-settings.js';
 export const data = new SlashCommandBuilder().setName('start').setDescription('Start looking for matches');
 
 export async function execute(int: ChatInputCommandInteraction) {
+    const dmChannel = await int.user.createDM();
+
     const settings = await db.findOneOptional(GuildSettings, {
         where: {
             clause: 'guildId = ?',
@@ -65,7 +67,12 @@ export async function execute(int: ChatInputCommandInteraction) {
         db.save(matchedProfile);
     }
 
-    const reply = await int.reply({
+    await int.reply({
+        content: 'Check your DMs',
+        ephemeral: true,
+    });
+
+    const reply = await dmChannel.send({
         content: 'Finding potential matches...',
     });
 

@@ -16,6 +16,7 @@ export const data = new SlashCommandBuilder().setName('setup-profile').setDescri
 
 export async function execute(int: ChatInputCommandInteraction) {
     let ans: Message | undefined = undefined;
+    const dmChannel = await int.user.createDM();
 
     try {
         const profile = db.findOneOptional(UserProfile, {
@@ -29,12 +30,17 @@ export async function execute(int: ChatInputCommandInteraction) {
         profile.userId = int.user.id;
 
         {
-            await int.reply(
+            await dmChannel.send(
                 'Following questions will guide you on completing your profile.\nCan you tell us more about yourself?'
             );
 
+            await int.reply({
+                content: 'Check your DMs',
+                ephemeral: true,
+            });
+
             ans = (
-                await int.channel!.awaitMessages({
+                await dmChannel.awaitMessages({
                     filter: (m) => m.author.id == int.user.id,
                     time: 3 * 60 * 1000,
                     max: 1,
@@ -51,7 +57,7 @@ export async function execute(int: ChatInputCommandInteraction) {
             });
 
             ans = (
-                await int.channel!.awaitMessages({
+                await dmChannel.awaitMessages({
                     filter: (m) => m.author.id == int.user.id,
                     time: 3 * 60 * 1000,
                     max: 1,
@@ -171,19 +177,15 @@ export async function execute(int: ChatInputCommandInteraction) {
             content: 'You profile setup is complete, run `/start` to find a match.',
         });
     } catch (e) {
-        if (e instanceof Error && e.message.includes('time')) {
+        if (e instanceof Error && e.stack?.includes('time')) {
             const content =
                 'Answer the questions within a couple minutes, you can start the setup again through /setup-profile';
-            if (!int.replied) {
-                await int.reply({
-                    content,
-                });
-            } else if (ans != null) {
+            if (ans != null) {
                 await ans.reply({
                     content,
                 });
             } else {
-                await int.channel!.send({
+                await dmChannel.send({
                     content: `<@${int.user.id}> ${content}`,
                 });
             }
