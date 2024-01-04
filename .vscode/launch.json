@@ -8,10 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "run dev",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "runtimeArgs": ["--loader", "tsx"],
+            "skipFiles": ["<node_internals>/**"],
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+            // "runtimeArgs": ["--loader", "tsx"],
             "program": "${workspaceFolder}/src/index.ts"
         }
     ]
