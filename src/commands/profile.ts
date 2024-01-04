@@ -5,8 +5,6 @@ import { buildProfileEmbed } from '../util.js';
 
 export const data = new SlashCommandBuilder().setName('profile').setDescription('See your profile.');
 
-// fixme: match output
-
 export async function execute(int: ChatInputCommandInteraction) {
     const profile = db.findOneOptional(UserProfile, {
         where: {
@@ -21,6 +19,7 @@ export async function execute(int: ChatInputCommandInteraction) {
 
     const embed = buildProfileEmbed({
         ...profile,
+        matchedTo: profile.matchedToUserId,
         username: int.user.username,
         avatarUrl: int.user.displayAvatarURL(),
     });

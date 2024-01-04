@@ -14,6 +14,7 @@ export function buildProfileEmbed(data: {
     link: string | null;
     bio: string | null;
     interests: string[];
+    matchedTo: string | null;
 }): EmbedBuilder {
     const embed = new EmbedBuilder()
         .setTitle(`${data.username}'s Profile`)
@@ -36,6 +37,13 @@ export function buildProfileEmbed(data: {
         .setFooter({
             text: `Gender: ${data.gender}`,
         });
+
+    if (data.matchedTo != null) {
+        embed.addFields({
+            name: '🔗 Match',
+            value: `<@${data.matchedTo}>`,
+        });
+    }
 
     return embed;
 }

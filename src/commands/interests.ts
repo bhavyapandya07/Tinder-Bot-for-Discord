@@ -5,8 +5,6 @@ import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 import { interests } from '../constants.js';
 
-// fixme make output the same
-
 export const data = new SlashCommandBuilder().setName('interests').setDescription('Select your interests');
 
 export async function execute(int: ChatInputCommandInteraction) {

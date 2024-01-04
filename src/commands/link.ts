@@ -2,8 +2,6 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandStringOpt
 import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 
-// fixme: match output
-
 export const data = new SlashCommandBuilder()
     .setName('link')
     .setDescription('Link your social media.')
@@ -32,6 +30,6 @@ export async function execute(int: ChatInputCommandInteraction) {
     db.save(profile);
 
     await int.reply({
-        content: 'Updated your social media.',
+        content: 'Updated your social media links.',
     });
 }

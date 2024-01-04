@@ -2,8 +2,6 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandStringOpt
 import db from '../database/database.js';
 import { UserProfile } from '../database/models/user-profile.js';
 
-// fixme: match output
-
 export const data = new SlashCommandBuilder()
     .setName('bio')
     .setDescription('Tell us something about yourself.')

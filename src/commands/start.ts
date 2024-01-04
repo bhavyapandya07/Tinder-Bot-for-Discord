@@ -125,6 +125,7 @@ export async function execute(int: ChatInputCommandInteraction) {
 
         const embed = buildProfileEmbed({
             ...match,
+            matchedTo: null,
             username: user.username,
             avatarUrl: user.displayAvatarURL(),
             interests: JSON.parse(match.interests),
