@@ -84,4 +84,4 @@ We welcome contributions! Follow these steps to contribute to the project:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Enjoy using Pairing Bot and watch your server's engagement and connectivity flourish! 🎉🚀
+### Enjoy using Pairing Bot and watch your server's engagement and connectivity flourish! 🎉🚀
